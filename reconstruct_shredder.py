@@ -345,7 +345,7 @@ def render_reconstruction(tiles: Sequence[np.ndarray], placements: Dict[int, Coo
 
     for idx, (gx, gy) in placements.items():
         x = (gx - minx) * w
-        y = (gy - miny) * h
+        y = (maxy - gy) * h
         canvas[y : y + h, x : x + w, :] = tiles[idx]
 
     return Image.fromarray(np.clip(canvas * 255.0, 0, 255).astype(np.uint8), mode="RGB")
@@ -376,7 +376,7 @@ def component_image(tile_imgs: Sequence[Image.Image], adjs: AdjList, component: 
 
     for node, (x, y) in coords.items():
         px = (x - minx) * tile_w
-        py = (y - miny) * tile_h
+        py = (maxy - y) * tile_h
         out.alpha_composite(tile_imgs[node], (px, py))
     return out
 
@@ -399,44 +399,59 @@ def pack_images_non_overlapping(
     placed_boxes: List[Tuple[int, int, int, int]] = []
 
     for img in images:
-        iw, ih = img.size
-        if iw >= cw or ih >= ch:
-            scale = min((cw - 2 * margin) / max(iw, 1), (ch - 2 * margin) / max(ih, 1), 1.0)
-            nw = max(1, int(iw * scale))
-            nh = max(1, int(ih * scale))
-            img = img.resize((nw, nh), Image.Resampling.BICUBIC)
-            iw, ih = img.size
-
-        max_x = max(margin, cw - iw - margin)
-        max_y = max(margin, ch - ih - margin)
-
         placed = False
-        for _ in range(tries_per_image):
-            x = rng.randint(margin, max_x)
-            y = rng.randint(margin, max_y)
-            box = (x, y, x + iw, y + ih)
-            if any(boxes_overlap(box, old, margin) for old in placed_boxes):
-                continue
-            canvas.alpha_composite(img, (x, y))
-            placed_boxes.append(box)
-            placed = True
-            break
+        current = img
 
-        if placed:
-            continue
+        # Guarantee visibility of every component by progressively shrinking on failure.
+        for shrink_step in range(12):
+            iw, ih = current.size
+            if iw >= cw or ih >= ch:
+                scale = min((cw - 2 * margin) / max(iw, 1), (ch - 2 * margin) / max(ih, 1), 1.0)
+                nw = max(1, int(iw * scale))
+                nh = max(1, int(ih * scale))
+                current = current.resize((nw, nh), Image.Resampling.BICUBIC)
+                iw, ih = current.size
 
-        for y in range(margin, max_y + 1, max(8, margin)):
-            ok = False
-            for x in range(margin, max_x + 1, max(8, margin)):
+            use_margin = max(0, margin - shrink_step)
+            max_x = max(use_margin, cw - iw - use_margin)
+            max_y = max(use_margin, ch - ih - use_margin)
+
+            for _ in range(tries_per_image):
+                x = rng.randint(use_margin, max_x)
+                y = rng.randint(use_margin, max_y)
                 box = (x, y, x + iw, y + ih)
-                if any(boxes_overlap(box, old, margin) for old in placed_boxes):
+                if any(boxes_overlap(box, old, use_margin) for old in placed_boxes):
                     continue
-                canvas.alpha_composite(img, (x, y))
+                canvas.alpha_composite(current, (x, y))
                 placed_boxes.append(box)
-                ok = True
+                placed = True
                 break
-            if ok:
+            if placed:
                 break
+
+            stride = max(1, min(8, max(1, use_margin)))
+            for y in range(use_margin, max_y + 1, stride):
+                ok = False
+                for x in range(use_margin, max_x + 1, stride):
+                    box = (x, y, x + iw, y + ih)
+                    if any(boxes_overlap(box, old, use_margin) for old in placed_boxes):
+                        continue
+                    canvas.alpha_composite(current, (x, y))
+                    placed_boxes.append(box)
+                    placed = True
+                    ok = True
+                    break
+                if ok:
+                    break
+            if placed:
+                break
+
+            if iw <= 2 or ih <= 2:
+                break
+            current = current.resize((max(1, int(iw * 0.9)), max(1, int(ih * 0.9))), Image.Resampling.BICUBIC)
+
+        if not placed:
+            raise RuntimeError("Could not pack all components without overlap; try a larger animation frame size.")
 
     return canvas.convert("RGB")
 
@@ -462,7 +477,19 @@ def build_tree_animation_frames(
             component_imgs.append(rotated)
 
         component_imgs.sort(key=lambda im: im.size[0] * im.size[1], reverse=True)
-        frame = pack_images_non_overlapping(component_imgs, (frame_size, frame_size), rng=rng, margin=12)
+        frame = None
+        work_size = frame_size
+        for _ in range(5):
+            try:
+                packed = pack_images_non_overlapping(component_imgs, (work_size, work_size), rng=rng, margin=12)
+                if work_size != frame_size:
+                    packed = packed.resize((frame_size, frame_size), Image.Resampling.BICUBIC)
+                frame = packed
+                break
+            except RuntimeError:
+                work_size = int(work_size * 1.25)
+        if frame is None:
+            raise RuntimeError("Failed to pack animation frame with all components.")
         frames.append(frame)
 
     return frames
@@ -476,6 +503,7 @@ def save_tree_build_animation(
     frame_size: int = 1024,
     max_angle: float = 35.0,
     duration_ms: int = 120,
+    frames_dir: Path | None = None,
 ) -> None:
     frames = build_tree_animation_frames(
         tiles=tiles,
@@ -489,6 +517,10 @@ def save_tree_build_animation(
     # End on the assembled reconstruction so the GIF converges to the final image.
     final_placements = reconstruct_layout(history[-1])
     frames.append(render_reconstruction(tiles, final_placements))
+    if frames_dir is not None:
+        frames_dir.mkdir(parents=True, exist_ok=True)
+        for i, frame in enumerate(frames):
+            frame.save(frames_dir / f"frame_{i:04d}.png")
     frames[0].save(
         output_path,
         save_all=True,
@@ -604,6 +636,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--animation-size", type=int, default=1024, help="Animation frame size (square pixels).")
     parser.add_argument("--animation-max-angle", type=float, default=35.0, help="Maximum absolute random rotation angle in degrees.")
     parser.add_argument("--animation-duration-ms", type=int, default=120, help="Animation frame duration in milliseconds.")
+    parser.add_argument("--animation-frames-dir", type=Path, default=None, help="Optional directory to save every animation frame as PNG.")
     return parser.parse_args()
 
 
@@ -631,6 +664,7 @@ def main() -> None:
             frame_size=args.animation_size,
             max_angle=args.animation_max_angle,
             duration_ms=args.animation_duration_ms,
+            frames_dir=args.animation_frames_dir,
         )
 
     edge_count = sum(len(edges) for edges in adjs)

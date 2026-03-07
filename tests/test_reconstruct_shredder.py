@@ -1,5 +1,3 @@
-import unittest
-
 import numpy as np
 from PIL import Image, ImageDraw
 
@@ -24,7 +22,7 @@ def make_synthetic_image(width: int, height: int) -> Image.Image:
     return img
 
 
-def split_tiles(img: Image.Image, rows: int, cols: int):
+def split_tiles(img: Image.Image, rows: int, cols: int) -> list[np.ndarray]:
     tile_h = img.height // rows
     tile_w = img.width // cols
     tiles = []
@@ -35,7 +33,7 @@ def split_tiles(img: Image.Image, rows: int, cols: int):
     return tiles
 
 
-def grid_neighbors(rows: int, cols: int):
+def grid_neighbors(rows: int, cols: int) -> set[tuple[int, int]]:
     n = rows * cols
     out = set()
     for i in range(n):
@@ -47,7 +45,7 @@ def grid_neighbors(rows: int, cols: int):
     return out
 
 
-def placement_neighbors(coords_by_id):
+def placement_neighbors(coords_by_id: dict[int, tuple[int, int]]) -> set[tuple[int, int]]:
     ids = sorted(coords_by_id)
     out = set()
     for i, a in enumerate(ids):
@@ -59,8 +57,11 @@ def placement_neighbors(coords_by_id):
     return out
 
 
-class TestReconstructionSynthetic(unittest.TestCase):
-    def test_reconstructs_shuffled_synthetic_tiles(self):
+class TestReconstructionSynthetic:
+    """Synthetic integration test for the MSGT reconstruction pipeline."""
+
+    def test_reconstructs_shuffled_synthetic_tiles(self) -> None:
+        """Reconstruct a shuffled synthetic grid and assert minimum topology quality."""
         rows, cols, tile_size = 4, 5, 40
         n = rows * cols
 
@@ -73,14 +74,11 @@ class TestReconstructionSynthetic(unittest.TestCase):
 
         adjs, placements, _ = run_reconstruction(shuffled_tiles, r=8.0, minset=3.0)
 
-        self.assertEqual(len(placements), n)
-        self.assertEqual(sum(len(e) for e in adjs), n - 1)
-        self.assertEqual(len(connected_components(adjs)), 1)
+        assert len(placements) == n
+        assert sum(len(e) for e in adjs) == n - 1
+        assert len(connected_components(adjs)) == 1
 
-        recovered_by_id = {
-            int(perm[shuffled_idx]): coord
-            for shuffled_idx, coord in placements.items()
-        }
+        recovered_by_id = {int(perm[shuffled_idx]): coord for shuffled_idx, coord in placements.items()}
 
         true_neighbors = grid_neighbors(rows, cols)
         rec_neighbors = placement_neighbors(recovered_by_id)
@@ -90,9 +88,5 @@ class TestReconstructionSynthetic(unittest.TestCase):
         recall = len(intersection) / len(true_neighbors)
 
         # Baseline quality for this deterministic synthetic fixture.
-        self.assertGreaterEqual(precision, 0.75)
-        self.assertGreaterEqual(recall, 0.45)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert precision >= 0.75
+        assert recall >= 0.45
