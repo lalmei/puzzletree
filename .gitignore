@@ -1,12 +1,29 @@
+# editors
+.idea/
+.cursor/
+.vscode/
+
+# python
+*.egg-info/
+*.py[cod]
 .venv/
+.venvs/
+/build/
+/dist/
+
+# tools
+.coverage*
+/.pdm-build/
+/htmlcov/
+/site/
+uv.lock
+
+# cache
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 __pycache__/
-*.pyc
 
-# Generated outputs
-*.png
-*.gif
-boat_tiles/
-assets/
-
-# OS files
-.DS_Store
+# project data
+data/
