@@ -1,0 +1,97 @@
+[build-system]
+requires = ["uv_build>=0.8.13,<0.9.0"]
+build-backend = "uv_build"
+
+
+
+
+[project]
+name = "puzzler"
+description = "Puzzle reconstruction experiments and CLI tooling."
+authors = [{name = "lalmei", email = ""}]
+license = "ISC"
+license-files = ["LICENSE"]
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = []
+version = "0.1.0"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Documentation",
+    "Topic :: Software Development",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dependencies = [
+    "catppuccin>=2.5.0",
+    "pydantic-settings>=2.12.0",
+    "rich>=14.3.0",
+    "pydantic>=2.12.0",
+    "typer>=0.17.3",]
+
+[project.urls]
+Homepage = "https://lalmei.github.io/puzzler"
+Documentation = "https://lalmei.github.io/puzzler"
+Changelog = "https://lalmei.github.io/puzzler/changelog"
+Repository = "https://github/lalmei/puzzler"
+Issues = "https://github/lalmei/puzzler/issues"
+Discussions = "https://github/lalmei/puzzler/discussions"
+[project.scripts]
+puzzler = "puzzler.cli:main"
+
+[tool.uv.build-backend]
+module-root = "src"
+module-name = "puzzler"
+
+[tool.uv]
+default-groups = ["maintain", "ci", "docs"]
+
+[dependency-groups]
+
+dev = []
+
+ml = [
+    "mlflow>=3.9.0",
+]
+maintain = [
+    "bump2version>=1.0.1",    "monkeytype>=23.3.0",
+]
+ci = [
+    "coverage>=7.13.0",
+    "httpx>=0.28.0",
+    "interrogate>=1.7.0",
+    "mypy>=1.19.0",
+    "pytest>=9.0.0",
+    "pytest-cov>=7.0.0",
+    "pytest-randomly>=4.0.0",
+    "pytest-xdist>=3.8.0",
+    "ruff>=0.14.0",
+    "types-markdown>=3.6",
+    "types-pyyaml>=6.0",
+]
+docs = [
+    "markdown-callouts>=0.4.0",
+    "markdown-exec>=1.12.0",
+    "mkdocs-coverage>=2.0.0",
+    "mkdocs-gen-files>=0.6.0",
+    "mkdocs-git-revision-date-localized-plugin>=1.5.0",
+    "mkdocs-literate-nav>=0.6.1",
+    "mkdocs-material>=9.7.0",
+    "mkdocs-minify-plugin>=0.8.0",
+    "pymdown-extensions>=10.12",
+    "mkdocs-jupyter>=0.24.8",
+    "mkdocs>=1.6.1",
+    "mkdocstrings[python]>=1.0.0",
+    "mkdocs-table-reader-plugin>=3.1.0",
+    "mkdocs-charts-plugin>=0.0.13",
+]
+

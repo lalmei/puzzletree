@@ -1,0 +1,11 @@
+---
+description: Keep CLI (Typer/Rich) in cli/; core logic in src; no CLI imports in core.
+globs: "src/puzzler/**/*.py"
+alwaysApply: true
+---
+
+# Layering
+
+- **Core logic** (app, rag, datasets, config): Pure logic—no Typer, Rich, or `cli` imports. Inputs/outputs are data (paths, dicts, dataclasses).
+- **cli/**: Commands call into core modules; all Typer/Rich/UX live here.
+- **Direction**: `cli` → core. Never the reverse.

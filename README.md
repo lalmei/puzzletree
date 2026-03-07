@@ -1,39 +1,17 @@
-# puzzler
+# fun
 
-Python recreation of Mathematica StackExchange answer 81171 for shredded-page reconstruction using a Minimum Spanning Geometrical Tree (MSGT) approach.
+[![documentation](https://img.shields.io/badge/docs-mkdocs-708FCC.svg?style=flat)](https://lalmei.gi.io/puzzler/)
+[![pypi version](https://img.shields.io/pypi/v/puzzler.svg)](https://pypi.org/project/puzzler/)
+Puzzle reconstruction experiments and CLI tooling.
 
-## Setup
+## Installation
 
 ```bash
-uv venv
-.venv/bin/pip install numpy pillow scipy
+pip install puzzler
 ```
 
-## Run demo
+With [`uv`](https://docs.astral.sh/uv/):
 
 ```bash
-.venv/bin/python reconstruct_shredder.py --output reconstructed_demo.png
-```
-
-## Run with animation
-
-```bash
-.venv/bin/python reconstruct_shredder.py \
-  --output reconstructed.png \
-  --animation tree_build.gif
-```
-
-## Run on your own tiles
-
-```bash
-.venv/bin/python reconstruct_shredder.py \
-  --input-dir /path/to/tiles \
-  --output reconstructed.png \
-  --animation tree_build.gif
-```
-
-## Tests
-
-```bash
-.venv/bin/python -m unittest discover -s tests -p 'test_*.py'
+uv tool install puzzler
 ```

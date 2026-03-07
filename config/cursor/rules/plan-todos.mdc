@@ -1,0 +1,13 @@
+---
+description: When producing a plan or todos, make each item atomic, clear, and implementable by a junior developer.
+globs:
+alwaysApply: false
+---
+
+# Plan and todo quality
+
+When writing a plan or todo list (e.g. in plan mode):
+
+- **Atomic**: One concrete outcome per item—no "and also" or multiple deliverables in one step.
+- **Clear**: Each item states what to do and where (file/module/command) so there's no guesswork.
+- **Junior-dev implementable**: Someone with basic context can complete an item without needing to design the solution; the item is the instruction.

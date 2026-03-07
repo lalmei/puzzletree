@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "make",
+      "args": ["test"],
+      "group": "test"
+    },
+    {
+      "label": "check",
+      "type": "shell",
+      "command": "make",
+      "args": ["check"]
+    },
+    {
+      "label": "format",
+      "type": "shell",
+      "command": "make",
+      "args": ["format"]
+    },
+    {
+      "label": "docs-serve",
+      "type": "shell",
+      "command": "make",
+      "args": ["docs-serve"],
+      "isBackground": true,
+      "presentation": { "reveal": "always" }
+    },
+    {
+      "label": "setup-ide",
+      "type": "shell",
+      "command": "make",
+      "args": ["setup-ide"]
+    }
+  ]
+}

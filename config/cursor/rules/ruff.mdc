@@ -1,0 +1,16 @@
+---
+description: All code must follow Ruff lint and format per config/ruff.toml
+globs: "**/*.py"
+alwaysApply: true
+---
+
+# Ruff and code quality
+
+- **Config**: Lint and format rules are defined in [config/ruff.toml](config/ruff.toml). All Python code must satisfy these rules.
+- **Verify**: Run `make check` (format-check, lint, check-types) or `ruff check .` / `ruff format --check .` with the project config before committing. Fix any reported issues.
+- **Fixing issues**: Prefer fixing the code. If a rule must be ignored:
+  - Prefer **inline** `# noqa: CODE` on the specific line that triggers the rule, with a short comment explaining why (e.g. circular import, Typer API requirement).
+  - Use **per-file** ignores in `config/ruff.toml` under `[lint.per-file-ignores]` only when the exception applies to the whole file; document the reason in a comment.
+- **No stray noqa**: Do not add a `noqa` for a rule that does not fire on that line (RUF100). Put `noqa` on the line that actually triggers the diagnostic (e.g. the `from` line for PLC0415, not the next line).
+- **Types**: Use explicit `Optional[T]` or `T | None` when a default is `None` (RUF013). Match annotations to defaults (e.g. `= None` → `str | None`).
+- **Imports**: Remove unused imports (F401). Keep imports at module top level unless deferred to avoid circular imports, and then suppress with `# noqa: PLC0415` on the `from` line only.

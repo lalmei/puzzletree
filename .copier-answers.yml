@@ -1,0 +1,26 @@
+# Changes here will be overwritten by Copier.
+_src_path: /Users/lalmei/projects/repoman/src/repoman
+author_email: ''
+author_fullname: lalmei
+author_username: lalmei
+ci: github.com
+container_registry: docker.io
+copyright_date: '2026'
+copyright_holder: lalmei
+copyright_holder_email: ''
+copyright_license: ISC
+dataset_enabled: false
+docs_only: false
+fastapi_enabled: false
+project_description: Puzzle reconstruction experiments and CLI tooling.
+project_name: fun
+python_distribution_name: puzzler
+python_notebooks: false
+python_package_command_line_name: puzzler
+python_package_distribution_name: puzzler
+python_package_import_name: puzzler
+rag_enabled: false
+repository_name: puzzler
+repository_namespace: lalmei
+repository_provider: github
+
