@@ -1,7 +1,7 @@
 import numpy as np
 from PIL import Image, ImageDraw
 
-from reconstruct_shredder import connected_components, run_reconstruction, to_float_array
+from puzzler.reconstruct import connected_components, run_reconstruction, to_float_array
 
 
 def make_synthetic_image(width: int, height: int) -> Image.Image:
@@ -12,7 +12,6 @@ def make_synthetic_image(width: int, height: int) -> Image.Image:
     arr = np.clip(np.stack([r, g, b], axis=-1), 0.0, 1.0)
     img = Image.fromarray((arr * 255).astype(np.uint8), mode="RGB")
 
-    # Overlay sharp structure so neighboring edges are distinctive.
     draw = ImageDraw.Draw(img)
     draw.rectangle((12, 12, width - 12, height - 12), outline=(255, 255, 255), width=3)
     draw.line((0, height // 3, width, height // 3), fill=(0, 0, 0), width=2)
@@ -72,7 +71,8 @@ class TestReconstructionSynthetic:
         perm = rng.permutation(n)
         shuffled_tiles = [original_tiles[i] for i in perm]
 
-        adjs, placements, _ = run_reconstruction(shuffled_tiles, r=8.0, minset=3.0)
+        result = run_reconstruction(shuffled_tiles, r=8.0, minset=3.0)
+        adjs, placements = result.adjs, result.placements
 
         assert len(placements) == n
         assert sum(len(e) for e in adjs) == n - 1
@@ -87,6 +87,5 @@ class TestReconstructionSynthetic:
         precision = len(intersection) / len(rec_neighbors)
         recall = len(intersection) / len(true_neighbors)
 
-        # Baseline quality for this deterministic synthetic fixture.
         assert precision >= 0.75
         assert recall >= 0.45
