@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Dict, List, Sequence, Tuple
+from collections.abc import Sequence
+from typing import Dict, List, Tuple
 
 import numpy as np
 from scipy.ndimage import gaussian_filter1d
@@ -8,6 +9,7 @@ from scipy.ndimage import gaussian_filter1d
 SideEdge = Tuple[int, int]  # (side_label, neighbor_index)
 AdjList = List[List[SideEdge]]
 Coord = Tuple[int, int]
+COMPONENT_GAP_TILES = 3
 
 
 def reverse_side(side: int) -> int:
@@ -112,10 +114,10 @@ def charged_path(in_adjgraph: AdjList, point1: int, charge: Coord) -> bool:
         parent[nbr] = (origin, point1)
 
     side_to_delta = {
-        1: (0, -1),
-        2: (0, 1),
-        3: (-1, 0),
-        4: (1, 0),
+        1: (-1, 0),
+        2: (1, 0),
+        3: (0, 1),
+        4: (0, -1),
     }
 
     while stack:
@@ -123,7 +125,8 @@ def charged_path(in_adjgraph: AdjList, point1: int, charge: Coord) -> bool:
         if marked[current]:
             continue
 
-        base = parent[current][0] if parent[current] is not None else origin
+        current_parent = parent[current]
+        base = current_parent[0] if current_parent is not None else origin
         add = side_to_delta[side]
         current_charge = (base[0] + add[0], base[1] + add[1])
 
@@ -162,7 +165,8 @@ def chargeds(in_adjgraph: AdjList, point1: int) -> List[Tuple[int, Coord]]:
         if marked[current]:
             continue
 
-        base = parent[current][0] if parent[current] is not None else (0, 0)
+        current_parent = parent[current]
+        base = current_parent[0] if current_parent is not None else (0, 0)
         add = side_to_delta[side]
         current_charge = (base[0] + add[0], base[1] + add[1])
         out.append((current, current_charge))
@@ -241,14 +245,12 @@ def msgt(
 
         charges_l2 = [coord for _, coord in chargeds(adjs, location2)]
         overlap_l1 = any(
-            charged_path(adjs, location1, (coord[0] - directions[0], coord[1] - directions[1]))
-            for coord in charges_l2
+            charged_path(adjs, location1, (coord[0] - directions[0], coord[1] - directions[1])) for coord in charges_l2
         )
 
         charges_l1 = [coord for _, coord in chargeds(adjs, location1)]
         overlap_l2 = any(
-            charged_path(adjs, location2, (coord[0] + directions[0], coord[1] + directions[1]))
-            for coord in charges_l1
+            charged_path(adjs, location2, (coord[0] + directions[0], coord[1] + directions[1])) for coord in charges_l1
         )
 
         if not overlap_l1 and not overlap_l2:
@@ -285,13 +287,12 @@ def connected_components(adjs: AdjList) -> List[List[int]]:
     return components
 
 
-def reconstruct_layout(adjs: AdjList) -> Dict[int, Coord]:
+def reconstruct_layout(adjs: AdjList, component_gap: int = COMPONENT_GAP_TILES) -> Dict[int, Coord]:
     components = connected_components(adjs)
     components.sort(key=len, reverse=True)
 
     placements: Dict[int, Coord] = {}
     x_offset = 0
-    gap = 2
 
     for comp in components:
         root = comp[0]
@@ -305,6 +306,6 @@ def reconstruct_layout(adjs: AdjList) -> Dict[int, Coord]:
             placements[node] = (x - minx + x_offset, y - miny)
 
         width = maxx - minx + 1
-        x_offset += width + gap
+        x_offset += width + component_gap
 
     return placements

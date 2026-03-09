@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import math
 import random
+from collections.abc import Sequence
 from pathlib import Path
-from typing import List, Sequence, Tuple
+from typing import List, Tuple
 
 import numpy as np
 from PIL import Image
 
-from puzzler.reconstruct.core import AdjList, connected_components, chargeds, reconstruct_layout
+from puzzler.reconstruct.core import AdjList, chargeds, connected_components, reconstruct_layout
 
 
 def render_reconstruction(tiles: Sequence[np.ndarray], placements: dict[int, tuple[int, int]]) -> Image.Image:
@@ -81,20 +83,15 @@ def pack_images_non_overlapping(
 
     for img in images:
         placed = False
-        current = img
+        iw, ih = img.size
+        if iw > cw or ih > ch:
+            raise RuntimeError("Could not pack all components without overlap; try a larger animation frame size.")
 
-        for shrink_step in range(12):
-            iw, ih = current.size
-            if iw >= cw or ih >= ch:
-                scale = min((cw - 2 * margin) / max(iw, 1), (ch - 2 * margin) / max(ih, 1), 1.0)
-                nw = max(1, int(iw * scale))
-                nh = max(1, int(ih * scale))
-                current = current.resize((nw, nh), Image.Resampling.BICUBIC)
-                iw, ih = current.size
-
-            use_margin = max(0, margin - shrink_step)
-            max_x = max(use_margin, cw - iw - use_margin)
-            max_y = max(use_margin, ch - ih - use_margin)
+        for use_margin in range(margin, -1, -1):
+            max_x = cw - iw - use_margin
+            max_y = ch - ih - use_margin
+            if max_x < use_margin or max_y < use_margin:
+                continue
 
             for _ in range(tries_per_image):
                 x = rng.randint(use_margin, max_x)
@@ -102,7 +99,7 @@ def pack_images_non_overlapping(
                 box = (x, y, x + iw, y + ih)
                 if any(boxes_overlap(box, old, use_margin) for old in placed_boxes):
                     continue
-                canvas.alpha_composite(current, (x, y))
+                canvas.alpha_composite(img, (x, y))
                 placed_boxes.append(box)
                 placed = True
                 break
@@ -116,7 +113,7 @@ def pack_images_non_overlapping(
                     box = (x, y, x + iw, y + ih)
                     if any(boxes_overlap(box, old, use_margin) for old in placed_boxes):
                         continue
-                    canvas.alpha_composite(current, (x, y))
+                    canvas.alpha_composite(img, (x, y))
                     placed_boxes.append(box)
                     placed = True
                     ok = True
@@ -126,14 +123,46 @@ def pack_images_non_overlapping(
             if placed:
                 break
 
-            if iw <= 2 or ih <= 2:
-                break
-            current = current.resize((max(1, int(iw * 0.9)), max(1, int(ih * 0.9))), Image.Resampling.BICUBIC)
-
         if not placed:
             raise RuntimeError("Could not pack all components without overlap; try a larger animation frame size.")
 
     return canvas.convert("RGB")
+
+
+def minimum_canvas_side(images: Sequence[Image.Image], margin: int) -> int:
+    if not images:
+        return 1
+
+    max_dim = max(max(img.size) for img in images) + 2 * margin
+    total_area = sum((img.size[0] + margin) * (img.size[1] + margin) for img in images)
+    return max(max_dim, int(math.ceil(math.sqrt(total_area))))
+
+
+def pack_images_with_growing_canvas(
+    images: Sequence[Image.Image],
+    rng: random.Random,
+    frame_size: int,
+    margin: int = 12,
+    max_growth_steps: int = 12,
+) -> Image.Image:
+    work_size = max(frame_size, minimum_canvas_side(images, margin))
+    for _ in range(max_growth_steps):
+        try:
+            return pack_images_non_overlapping(images, (work_size, work_size), rng=rng, margin=margin)
+        except RuntimeError:
+            work_size = int(math.ceil(work_size * 1.25))
+    raise RuntimeError("Failed to pack animation frame with all components.")
+
+
+def pad_image_to_square(image: Image.Image, side: int) -> Image.Image:
+    if image.width > side or image.height > side:
+        raise ValueError("Image is larger than the requested square canvas.")
+
+    canvas = Image.new("RGB", (side, side), (255, 255, 255))
+    x = (side - image.width) // 2
+    y = (side - image.height) // 2
+    canvas.paste(image, (x, y))
+    return canvas
 
 
 def build_tree_animation_frames(
@@ -146,6 +175,7 @@ def build_tree_animation_frames(
     rng = random.Random(seed)
     tile_imgs = tile_rgba_images(tiles)
     frames: List[Image.Image] = []
+    max_side = frame_size
 
     for adjs in history:
         components = connected_components(adjs)
@@ -157,22 +187,11 @@ def build_tree_animation_frames(
             component_imgs.append(rotated)
 
         component_imgs.sort(key=lambda im: im.size[0] * im.size[1], reverse=True)
-        frame = None
-        work_size = frame_size
-        for _ in range(5):
-            try:
-                packed = pack_images_non_overlapping(component_imgs, (work_size, work_size), rng=rng, margin=12)
-                if work_size != frame_size:
-                    packed = packed.resize((frame_size, frame_size), Image.Resampling.BICUBIC)
-                frame = packed
-                break
-            except RuntimeError:
-                work_size = int(work_size * 1.25)
-        if frame is None:
-            raise RuntimeError("Failed to pack animation frame with all components.")
+        frame = pack_images_with_growing_canvas(component_imgs, rng=rng, frame_size=frame_size, margin=12)
+        max_side = max(max_side, frame.width, frame.height)
         frames.append(frame)
 
-    return frames
+    return [pad_image_to_square(frame, max_side) for frame in frames]
 
 
 def save_tree_build_animation(
@@ -182,7 +201,7 @@ def save_tree_build_animation(
     seed: int = 0,
     frame_size: int = 1024,
     max_angle: float = 35.0,
-    duration_ms: int = 120,
+    duration_ms: int = 400,
     frames_dir: Path | None = None,
 ) -> None:
     frames = build_tree_animation_frames(
@@ -195,9 +214,19 @@ def save_tree_build_animation(
     if not frames:
         raise ValueError("No animation frames generated")
     final_placements = reconstruct_layout(history[-1])
-    frames.append(render_reconstruction(tiles, final_placements))
+    final_frame = render_reconstruction(tiles, final_placements)
+    common_side = max(
+        max(frame.width for frame in frames),
+        max(frame.height for frame in frames),
+        final_frame.width,
+        final_frame.height,
+    )
+    frames = [pad_image_to_square(frame, common_side) for frame in frames]
+    frames.append(pad_image_to_square(final_frame, common_side))
     if frames_dir is not None:
         frames_dir.mkdir(parents=True, exist_ok=True)
+        for existing in frames_dir.glob("frame_*.png"):
+            existing.unlink()
         for i, frame in enumerate(frames):
             frame.save(frames_dir / f"frame_{i:04d}.png")
     frames[0].save(
