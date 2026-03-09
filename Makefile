@@ -52,6 +52,12 @@ include make_cmds/tests.mk
 include make_cmds/documentation.mk
 include make_cmds/build.mk
 
+.PHONY: checks
+checks: check ## Alias for check
+
+.PHONY: tests
+tests: test ## Alias for test
+
 ##############
 # Versioning #
 ##############

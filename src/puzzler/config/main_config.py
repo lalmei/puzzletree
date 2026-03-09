@@ -5,7 +5,11 @@
 import json  # noqa: F401 - Reserved for future JSON config file handling
 from pathlib import Path  # noqa: F401 - Reserved for future path-based config loading
 
-from pydantic import Field, field_validator, model_validator  # noqa: F401 - Reserved for future field validation
+from pydantic import (  # noqa: F401 - Reserved for future field validation
+    Field,
+    field_validator,
+    model_validator,
+)
 from pydantic_settings import (
     BaseSettings,
     JsonConfigSettingsSource,  # noqa: F401 - Reserved for future JSON config source
@@ -28,7 +32,7 @@ class Config(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env", ".env.dev", ".env.prod"),
         env_file_encoding="utf-8",
-        json_file="ml_config.json",
+        json_file="puzzler_config.json",
     )
     # Configurations for the application
     app_name: str = "puzzler"

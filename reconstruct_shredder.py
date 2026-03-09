@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Backward-compatible CLI wrapper for reconstruction.
-
-This script preserves the original argparse interface while delegating all
-implementation to the `puzzler.reconstruct` library package.
-"""
+"""Backward-compatible CLI wrapper for reconstruction."""
 
 from __future__ import annotations
 
@@ -22,9 +18,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--animation", type=Path, default=None, help="Optional output GIF path for tree-building animation.")
     parser.add_argument("--animation-seed", type=int, default=0, help="Random seed for animation rotations/packing.")
     parser.add_argument("--animation-size", type=int, default=1024, help="Animation frame size (square pixels).")
-    parser.add_argument("--animation-max-angle", type=float, default=35.0, help="Maximum absolute random rotation angle in degrees.")
-    parser.add_argument("--animation-duration-ms", type=int, default=120, help="Animation frame duration in milliseconds.")
-    parser.add_argument("--animation-frames-dir", type=Path, default=None, help="Optional directory to save every animation frame as PNG.")
+    parser.add_argument(
+        "--animation-max-angle",
+        type=float,
+        default=35.0,
+        help="Maximum absolute random rotation angle in degrees.",
+    )
+    parser.add_argument(
+        "--animation-duration-ms",
+        type=int,
+        default=120,
+        help="Animation frame duration in milliseconds.",
+    )
+    parser.add_argument(
+        "--animation-frames-dir",
+        type=Path,
+        default=None,
+        help="Optional directory to save every animation frame as PNG.",
+    )
     return parser.parse_args()
 
 

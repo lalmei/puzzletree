@@ -49,7 +49,7 @@ cli_app = Typer(add_completion=True, invoke_without_command=True, no_args_is_hel
 _register_commands(cli_app)
 
 
-def _version_callback(value: bool) -> None:  # noqa: FBT001 - Typer callbacks require bool positional args
+def _version_callback(value: bool) -> None:
     """Print model version information.
 
     Parameters
@@ -63,7 +63,7 @@ def _version_callback(value: bool) -> None:  # noqa: FBT001 - Typer callbacks re
         raise Exit(0)
 
 
-def _debug_info_callback(value: bool) -> None:  # noqa: FBT001 - Typer callbacks require bool positional args
+def _debug_info_callback(value: bool) -> None:
     """Print debug information.
 
     Parameters
@@ -80,16 +80,16 @@ def _debug_info_callback(value: bool) -> None:  # noqa: FBT001 - Typer callbacks
 @cli_app.callback(invoke_without_command=True, no_args_is_help=True)
 def main(
     ctx: Context,
-    dry_run: bool | None = Option(False, "--dry-run", help="Show changes but do not execute them"),  # noqa: FBT001, FBT003
-    verbose: bool | None = Option(False, "--verbose", "-v", help="verbose mode"),  # noqa: FBT001, FBT003
-    version: bool | None = Option(  # noqa: ARG001, FBT001 - Handled by callback, Typer requires bool positional
+    dry_run: bool | None = Option(False, "--dry-run", help="Show changes but do not execute them"),
+    verbose: bool | None = Option(False, "--verbose", "-v", help="verbose mode"),
+    version: bool | None = Option(  # noqa: ARG001 - Handled by callback
         None,
         "--version",
         help="check model version",
         callback=_version_callback,
         is_eager=True,
     ),
-    debug_info: bool | None = Option(  # noqa: ARG001, FBT001 - Handled by callback, Typer requires bool positional
+    debug_info: bool | None = Option(  # noqa: ARG001 - Handled by callback
         None,
         "--debug-info",
         help="Print debug information",

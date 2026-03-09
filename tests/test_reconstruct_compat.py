@@ -4,9 +4,8 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
-
 import reconstruct_shredder
+from PIL import Image
 
 
 def write_test_tiles(output_dir: Path, rows: int = 3, cols: int = 3, tile_size: int = 24) -> Path:

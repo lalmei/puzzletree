@@ -14,6 +14,8 @@
 
 # tools
 .coverage*
+coverage.xml
+coverage.json
 /.pdm-build/
 /htmlcov/
 /site/

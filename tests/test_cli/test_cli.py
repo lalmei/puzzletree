@@ -25,7 +25,8 @@ def test_show_help() -> None:
     runner = CliRunner()
     result = runner.invoke(cli, ["--help"])
     assert result.exit_code == 0
-    assert "puzzler" in result.output
+    assert "Usage:" in result.output
+    assert "reconstruct" in result.output
 
 
 def test_show_version() -> None:
