@@ -30,7 +30,9 @@ def split_tiles(img: Image.Image, rows: int = ROWS, cols: int = COLS) -> list[np
 def write_tiles(output_dir: Path, tiles: list[np.ndarray]) -> Path:
     output_dir.mkdir()
     for idx, tile in enumerate(tiles):
-        Image.fromarray(np.clip(tile * 255.0, 0, 255).astype(np.uint8), mode="RGB").save(output_dir / f"tile_{idx:03d}.png")
+        Image.fromarray(np.clip(tile * 255.0, 0, 255).astype(np.uint8), mode="RGB").save(
+            output_dir / f"tile_{idx:03d}.png",
+        )
     return output_dir
 
 
@@ -111,7 +113,7 @@ def test_run_from_options_writes_output_for_reference_tiles(tmp_path: Path) -> N
             output=output_path,
             r=8.0,
             minset=3.0,
-        )
+        ),
     )
 
     assert output_path.exists()
@@ -120,3 +122,33 @@ def test_run_from_options_writes_output_for_reference_tiles(tmp_path: Path) -> N
     assert len(result.placements) == TILE_COUNT
     assert sum(len(edges) for edges in result.adjs) == TILE_COUNT - 1
     assert len(connected_components(result.adjs)) == 1
+
+
+def test_run_from_options_emits_progress_stages(tmp_path: Path) -> None:
+    tiles = load_reference_tiles("city.jpg")
+    input_dir = write_tiles(tmp_path / "tiles", tiles)
+    output_path = tmp_path / "reconstructed.png"
+    stages: list[str] = []
+
+    _ = run_from_options(
+        ReconstructOptions(
+            input_dir=input_dir,
+            output=output_path,
+            r=8.0,
+            minset=3.0,
+        ),
+        progress_callback=stages.append,
+    )
+
+    assert stages == [
+        "Loading tiles",
+        "Computing edge weights",
+        "Assembling reconstruction tree",
+        "Rendering reconstructed image",
+        "Saving reconstructed image",
+    ]
+
+
+def test_reconstruct_options_default_minset_is_conservative() -> None:
+    options = ReconstructOptions(input_dir=Path("unused"))
+    assert options.minset == 0.1
