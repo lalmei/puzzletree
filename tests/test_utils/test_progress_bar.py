@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from puzzler.utils.progress_bar import ProgressBar
+from puzzler.utils.progress_bar import ProgressBar, StageProgressBar
 
 
 class TestProgressBarInit:
@@ -142,3 +142,23 @@ class TestProgressBarStop:
         pb.start(total_batches=10, epoch=1)
         pb.stop()
         assert pb.progress is not None
+
+
+class TestStageProgressBar:
+    """Test stage-based CLI progress bar."""
+
+    def test_start_when_disabled(self) -> None:
+        pb = StageProgressBar(use_progress_bar=False)
+        pb.start(total_steps=3)
+        assert pb.progress is None
+        assert pb.task is None
+
+    def test_start_advance_and_stop_when_enabled(self) -> None:
+        pb = StageProgressBar(use_progress_bar=True)
+        pb.start(total_steps=3, description="Start")
+        try:
+            assert pb.progress is not None
+            assert pb.task is not None
+            pb.advance("Next stage")
+        finally:
+            pb.stop()

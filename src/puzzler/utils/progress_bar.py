@@ -1,8 +1,16 @@
 """Progress bar utilities for training visualization."""
 
-import time
+from __future__ import annotations
 
-from rich.progress import BarColumn, Progress, TaskID, TextColumn, TimeRemainingColumn
+import time
+from typing import TYPE_CHECKING, Self
+
+from rich.progress import BarColumn, Progress, SpinnerColumn, TaskID, TextColumn, TimeElapsedColumn, TimeRemainingColumn
+
+if TYPE_CHECKING:
+    from types import TracebackType
+
+    from rich.console import Console
 
 
 class ProgressBar:
@@ -36,7 +44,7 @@ class ProgressBar:
         self.last_update_time: float = time.perf_counter()
         self.update_interval: int = 1  # Initial step size
 
-    def __enter__(self) -> "ProgressBar":  # noqa: PYI034 - String literal return type is acceptable for forward references
+    def __enter__(self) -> Self:
         """Allows `with ProgressBar(...)` usage."""
         return self
 
@@ -98,5 +106,65 @@ class ProgressBar:
 
     def stop(self) -> None:
         """Stops the progress bar and finalizes its output."""
+        if self.use_progress_bar and self.progress is not None:
+            self.progress.stop()
+
+
+class StageProgressBar:
+    """Simple stage-based progress bar for CLI workflows."""
+
+    def __init__(
+        self,
+        console: Console | None = None,
+        use_progress_bar: bool = True,  # noqa: FBT001, FBT002 - Boolean positional args acceptable for utility class
+        transient: bool = True,  # noqa: FBT001, FBT002 - Boolean positional args acceptable for utility class
+    ) -> None:
+        """Initialize the stage-based progress helper."""
+        self.console = console
+        self.use_progress_bar = use_progress_bar
+        self.transient = transient
+        self.progress: Progress | None = None
+        self.task: TaskID | None = None
+
+    def __enter__(self) -> Self:
+        """Return the progress bar for context-manager usage."""
+        return self
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
+        """Stop the progress bar when leaving a context manager."""
+        self.stop()
+
+    def start(self, total_steps: int, description: str = "Starting") -> None:
+        """Start a progress bar that advances once per workflow stage."""
+        if not self.use_progress_bar:
+            return
+
+        self.progress = Progress(
+            SpinnerColumn(),
+            TextColumn("[bold blue]{task.description}[/]"),
+            BarColumn(),
+            TextColumn("{task.completed}/{task.total}"),
+            TimeElapsedColumn(),
+            console=self.console,
+            transient=self.transient,
+        )
+        self.task = self.progress.add_task(description, total=total_steps)
+        self.progress.start()
+
+    def advance(self, description: str) -> None:
+        """Advance the stage counter and update the current description."""
+        if not self.use_progress_bar or self.progress is None or self.task is None:
+            return
+
+        self.progress.update(self.task, advance=1, description=description)
+        self.progress.refresh()
+
+    def stop(self) -> None:
+        """Stop the progress bar."""
         if self.use_progress_bar and self.progress is not None:
             self.progress.stop()

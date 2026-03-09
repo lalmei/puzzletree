@@ -159,6 +159,13 @@ def get_logger_console(
         for handler in root_logger.handlers:
             if handler.get_name() == "rich":
                 rich_handler: RichHandler = cast("RichHandler", handler)
+                if _is_running_in_pytest():
+                    rich_handler.console = Console(
+                        file=sys.stdout,
+                        force_terminal=False,
+                        legacy_windows=False,
+                        no_color=True,
+                    )
                 # use console from handler
                 console = rich_handler.console
                 return logger, console
