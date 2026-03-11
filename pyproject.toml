@@ -36,7 +36,10 @@ dependencies = [
     "pydantic-settings>=2.12.0",
     "rich>=14.3.0",
     "pydantic>=2.12.0",
-    "typer>=0.17.3",]
+    "typer>=0.17.3",
+    "scipy>=1.15.3",
+    "pillow>=12.1.1",
+]
 
 [project.urls]
 Homepage = "https://lalmei.github.io/puzzletree"
@@ -94,4 +97,3 @@ docs = [
     "mkdocs-table-reader-plugin>=3.1.0",
     "mkdocs-charts-plugin>=0.0.13",
 ]
-
