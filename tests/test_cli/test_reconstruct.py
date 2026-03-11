@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from puzzler.reconstruct.io import load_tiles_from_dir
+from puzzletree.reconstruct.io import load_tiles_from_dir
 
 
 def write_test_tiles(output_dir: Path, rows: int = 3, cols: int = 4, tile_size: int = 24) -> Path:
@@ -46,6 +46,45 @@ def test_reconstruct_input_dir_writes_output(tmp_path: Path, cli_runner, cli_app
     assert "Saved:" in result.output
 
 
+def test_reconstruct_accepts_short_input_option(tmp_path: Path, cli_runner, cli_app) -> None:
+    input_dir = write_test_tiles(tmp_path / "tiles")
+    out = tmp_path / "from_dir.png"
+
+    result = cli_runner.invoke(cli_app, ["reconstruct", "-i", str(input_dir), "--output", str(out)])
+
+    assert result.exit_code == 0
+    assert out.exists()
+
+
+def test_reconstruct_accepts_short_output_option(tmp_path: Path, cli_runner, cli_app) -> None:
+    input_dir = write_test_tiles(tmp_path / "tiles")
+    out = tmp_path / "from_dir.png"
+
+    result = cli_runner.invoke(cli_app, ["reconstruct", "--input-dir", str(input_dir), "-o", str(out)])
+
+    assert result.exit_code == 0
+    assert out.exists()
+
+
+def test_reconstruct_uses_default_output_in_cwd(
+    tmp_path: Path,
+    cli_runner,
+    cli_app,
+    monkeypatch,
+) -> None:
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    input_dir = write_test_tiles(tmp_path / "puzzletree-city-tiles")
+    output_path = workspace / "puzzletree-city-reconstructed.png"
+    monkeypatch.chdir(workspace)
+
+    result = cli_runner.invoke(cli_app, ["reconstruct", "--input-dir", str(input_dir)])
+
+    assert result.exit_code == 0
+    assert output_path.exists()
+    assert "Saved:" in result.output
+
+
 def test_reconstruct_animation_outputs_gif_and_frames(tmp_path: Path, cli_runner, cli_app) -> None:
     input_dir = write_test_tiles(tmp_path / "tiles", rows=3, cols=3)
     out = tmp_path / "recon.png"
@@ -71,6 +110,39 @@ def test_reconstruct_animation_outputs_gif_and_frames(tmp_path: Path, cli_runner
     assert gif.exists()
     assert frames_dir.exists()
     assert any(frames_dir.iterdir())
+
+
+def test_reconstruct_animation_uses_default_frames_dir_in_cwd(
+    tmp_path: Path,
+    cli_runner,
+    cli_app,
+    monkeypatch,
+) -> None:
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    input_dir = write_test_tiles(tmp_path / "puzzletree-city-tiles", rows=3, cols=3)
+    output_path = workspace / "puzzletree-city-reconstructed.png"
+    gif = workspace / "puzzletree-city-tree-build.gif"
+    frames_dir = workspace / "puzzletree-city-frames"
+    monkeypatch.chdir(workspace)
+
+    result = cli_runner.invoke(
+        cli_app,
+        [
+            "reconstruct",
+            "--input-dir",
+            str(input_dir),
+            "--animation",
+            str(gif),
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert output_path.exists()
+    assert gif.exists()
+    assert frames_dir.exists()
+    assert any(frames_dir.iterdir())
+    assert "Saved frames:" in result.output
 
 
 def test_load_tiles_fixture_is_valid(tmp_path: Path) -> None:

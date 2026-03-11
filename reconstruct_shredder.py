@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from puzzler.reconstruct import ReconstructOptions, ReconstructionRunWithHistory, run_from_options
+from puzzletree.reconstruct import ReconstructOptions, ReconstructionRunWithHistory, run_from_options
 
 
 def parse_args() -> argparse.Namespace:
@@ -27,7 +27,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--animation-duration-ms",
         type=int,
-        default=120,
+        default=1000,
         help="Animation frame duration in milliseconds.",
     )
     parser.add_argument(

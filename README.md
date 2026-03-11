@@ -25,31 +25,33 @@ full reference images, so the quickest demo flow is:
 1. Split one of the bundled images into tiles.
 2. Run `puzzletree reconstruct` on that tile directory.
 
-This example uses `tests/test_data/city.jpg` and writes everything to `/tmp`:
+This example uses `tests/test_data/city.jpg` and writes tiles into the current directory:
 
 ```bash
 uv run python -m puzzletree tile \
-  --input-image tests/test_data/city.jpg \
-  --output-dir /tmp/puzzletree-city-tiles \
-  --rows 4 \
-  --cols 5
+  --input-image tests/test_data/city.jpg
 ```
+
+This uses the default 4x5 grid and writes PNG tiles to
+`./puzzletree-city-tiles`.
 
 Then run the CLI from a source checkout:
 
 ```bash
 uv run python -m puzzletree reconstruct \
-  --input-dir /tmp/puzzletree-city-tiles \
-  --output /tmp/puzzletree-city-reconstructed.png \
-  --animation /tmp/puzzletree-city-tree-build.gif \
-  --animation-frames-dir /tmp/puzzletree-city-frames
+  --input-dir ./puzzletree-city-tiles \
+  --animation ./puzzletree-city-tree-build.gif
 ```
+
+This writes the reconstructed image to `./puzzletree-city-reconstructed.png` and,
+when `--animation` is set, saves animation frames to
+`./puzzletree-city-frames`.
 
 If you installed the package globally, the same command works without `uv run`:
 
 ```bash
-puzzletree tile --input-image tests/test_data/city.jpg --output-dir /tmp/puzzletree-city-tiles --rows 4 --cols 5
-puzzletree reconstruct --input-dir /tmp/puzzletree-city-tiles --output reconstructed.png
+puzzletree tile --input-image tests/test_data/city.jpg
+puzzletree reconstruct --input-dir ./puzzletree-city-tiles
 ```
 
 Other bundled demo images:
