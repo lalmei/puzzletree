@@ -76,7 +76,9 @@ def reconstruct(
     resolved_animation_frames_dir = (
         animation_frames_dir
         if animation_frames_dir is not None
-        else _default_animation_frames_dir(input_dir) if animation is not None else None
+        else _default_animation_frames_dir(input_dir)
+        if animation is not None
+        else None
     )
 
     options = ReconstructOptions(
