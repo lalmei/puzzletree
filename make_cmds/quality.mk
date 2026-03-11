@@ -25,7 +25,7 @@ fix: ## Auto-fix linting issues
 .PHONY: check-types
 check-types: ## Type check code using mypy
 	@$(call i, Type checking code)
-	uv run mypy src/puzzler/ --config-file=config/mypy.ini
+	uv run mypy src/puzzletree/ --config-file=config/mypy.ini
 
 .PHONY: type-check
 type-check: check-types ## Alias for check-types

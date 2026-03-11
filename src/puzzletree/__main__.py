@@ -1,4 +1,4 @@
-"""Entry-point module, in case you use `python -m puzzler`.
+"""Entry-point module, in case you use `python -m puzzletree`.
 
 Why does this file exist, and why `__main__`? For more info, read:
 
@@ -6,7 +6,7 @@ Why does this file exist, and why `__main__`? For more info, read:
 - https://docs.python.org/3/using/cmdline.html#cmdoption-m
 """
 
-from puzzler.cli import cli
+from puzzletree.cli import cli
 
 if __name__ == "__main__":
     cli()

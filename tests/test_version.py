@@ -1,4 +1,4 @@
-"""Unit tests for puzzler version and debugging utilities."""
+"""Unit tests for puzzletree version and debugging utilities."""
 
 import os
 import sys
@@ -9,7 +9,7 @@ from unittest.mock import patch
 import pytest
 from rich.console import Console
 
-from puzzler._version import (
+from puzzletree._version import (
     Environment,
     Package,
     Variable,
@@ -19,7 +19,7 @@ from puzzler._version import (
     get_version,
     version_info,
 )
-from puzzler.utils.theme.theme import set_theme
+from puzzletree.utils.theme.theme import set_theme
 
 
 class TestVersionFunctions:
@@ -27,11 +27,11 @@ class TestVersionFunctions:
 
     def test_get_version_success(self) -> None:
         """Test get_version with valid distribution."""
-        result = get_version("puzzler")
+        result = get_version("puzzletree")
         assert isinstance(result, str)
         assert result != "0.0.0" or result == "0.0.0"  # May be dev/installed
 
-    @patch("puzzler._version.metadata.version")
+    @patch("puzzletree._version.metadata.version")
     def test_get_version_package_not_found(self, mock_version: Any) -> None:
         """Test get_version when package is not found."""
         from importlib.metadata import PackageNotFoundError
@@ -43,7 +43,7 @@ class TestVersionFunctions:
     def test_version_info(self) -> None:
         """Test version_info function."""
         result = version_info()
-        assert "puzzler:" in str(result)
+        assert "puzzletree:" in str(result)
         assert hasattr(result, "spans")
 
 
@@ -119,19 +119,19 @@ class TestGetDebugInfo:
         assert isinstance(result.variables, list)
 
     def test_get_debug_info_packages(self) -> None:
-        """Test get_debug_info includes puzzler package."""
+        """Test get_debug_info includes puzzletree package."""
         result = get_debug_info()
-        pkg_list = [pkg for pkg in result.packages if pkg.name == "puzzler"]
+        pkg_list = [pkg for pkg in result.packages if pkg.name == "puzzletree"]
         assert len(pkg_list) >= 1
         assert pkg_list[0].version
 
-    @patch.dict(os.environ, {"PYTHONPATH": "/test/path", "puzzler_DEBUG": "true"})
+    @patch.dict(os.environ, {"PYTHONPATH": "/test/path", "puzzletree_DEBUG": "true"})
     def test_get_debug_info_with_environment_variables(self) -> None:
         """Test get_debug_info with environment variables."""
         result = get_debug_info()
         variable_names = [var.name for var in result.variables]
         assert "PYTHONPATH" in variable_names
-        assert "puzzler_DEBUG" in variable_names
+        assert "puzzletree_DEBUG" in variable_names
 
     @patch.dict(os.environ, {}, clear=True)
     def test_get_debug_info_without_environment_variables(self) -> None:
@@ -140,7 +140,7 @@ class TestGetDebugInfo:
         assert isinstance(result, Environment)
         assert isinstance(result.variables, list)
 
-    @patch.dict(os.environ, {"PYTHONPATH": "", "puzzler_TEST": ""})
+    @patch.dict(os.environ, {"PYTHONPATH": "", "puzzletree_TEST": ""})
     def test_get_debug_info_with_empty_variables(self) -> None:
         """Test get_debug_info filters out empty environment variables."""
         result = get_debug_info()
@@ -178,20 +178,20 @@ class TestDebugInfo:
     def test_debug_info_wide_console_uses_layout(self) -> None:
         """Test debug_info with use_layout True uses layout (wide terminal)."""
         console = Console(theme=set_theme())
-        with patch("puzzler.cli.messages.layout.use_layout", return_value=True):
+        with patch("puzzletree.cli.messages.layout.use_layout", return_value=True):
             debug_info(console)
 
     def test_debug_info_narrow_console_uses_panel(self) -> None:
         """Test debug_info with use_layout False uses panel (narrow terminal)."""
         console = Console(theme=set_theme())
-        with patch("puzzler.cli.messages.layout.use_layout", return_value=False):
+        with patch("puzzletree.cli.messages.layout.use_layout", return_value=False):
             debug_info(console)
 
 
 class TestErrorHandling:
     """Test error handling scenarios."""
 
-    @patch("puzzler._version.metadata.version")
+    @patch("puzzletree._version.metadata.version")
     def test_get_version_metadata_error(self, mock_version: Any) -> None:
         """Test get_version handles metadata errors."""
         from importlib.metadata import PackageNotFoundError

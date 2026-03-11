@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 import typer
 from typer.testing import CliRunner
 
-from puzzler.cli.register import _register_commands
+from puzzletree.cli.register import _register_commands
 
 
 def test_dynamic_command_discovery(cli_runner: CliRunner, cli_app: typer.Typer) -> None:
@@ -57,7 +57,7 @@ def test_register_skips_module_without_app() -> None:
     mock_file_path.parent = mock_parent
     module_without_app = types.ModuleType("noapp")
     assert not hasattr(module_without_app, "app")
-    register_module = "puzzler.cli.register"
+    register_module = "puzzletree.cli.register"
     with (
         patch(f"{register_module}.Path", return_value=mock_file_path),
         patch(
@@ -89,7 +89,7 @@ def test_register_handles_import_error() -> None:
             raise ImportError("Simulated import error for testing")
         return types.ModuleType(name.rsplit(".", 1)[-1])
 
-    register_module = "puzzler.cli.register"
+    register_module = "puzzletree.cli.register"
     with (
         patch(f"{register_module}.Path", return_value=mock_file_path),
         patch(

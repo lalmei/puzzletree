@@ -1,1 +1,1 @@
-"""Tests suite for `puzzler`."""
+"""Tests suite for `puzzletree`."""

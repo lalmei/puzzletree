@@ -7,9 +7,9 @@ from typing import Callable, List, cast
 import numpy as np
 from PIL import Image
 
-from puzzler.reconstruct.core import AdjList, Coord, build_weight_matrices, msgt, reconstruct_layout
-from puzzler.reconstruct.io import load_tiles_from_dir
-from puzzler.reconstruct.render import render_reconstruction, save_tree_build_animation
+from puzzletree.reconstruct.core import AdjList, Coord, build_weight_matrices, msgt, reconstruct_layout
+from puzzletree.reconstruct.io import load_tiles_from_dir
+from puzzletree.reconstruct.render import render_reconstruction, save_tree_build_animation
 
 ProgressCallback = Callable[[str], None]
 
@@ -36,7 +36,7 @@ class ReconstructOptions:
     animation_seed: int = 0
     animation_size: int = 1024
     animation_max_angle: float = 35.0
-    animation_duration_ms: int = 400
+    animation_duration_ms: int = 1000
     animation_frames_dir: Path | None = None
 
 

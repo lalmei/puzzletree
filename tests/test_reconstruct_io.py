@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from PIL import Image
 
-from puzzler.reconstruct.io import save_tiles_from_image, split_image_into_tiles
+from puzzletree.reconstruct.io import save_tiles_from_image, split_image_into_tiles
 
 
 def make_test_image(path: Path, size: tuple[int, int] = (40, 20)) -> Path:

@@ -4,4 +4,4 @@ hide:
 - navigation
 ---
 
-# ::: puzzler
+# ::: puzzletree

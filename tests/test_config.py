@@ -3,7 +3,7 @@
 import importlib.util
 from pathlib import Path
 
-from puzzler.config import Config
+from puzzletree.config import Config
 
 
 def test_config_defaults() -> None:
@@ -14,7 +14,7 @@ def test_config_defaults() -> None:
 
 def test_root_config_module() -> None:
     """Test root config.py module is loadable and defines Config with log_format."""
-    pkg_root = Path(__file__).resolve().parent.parent / "src" / "puzzler"
+    pkg_root = Path(__file__).resolve().parent.parent / "src" / "puzzletree"
     config_py = pkg_root / "config.py"
     if not config_py.exists():
         import pytest

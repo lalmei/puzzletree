@@ -8,7 +8,7 @@ import typer
 from pydantic import BaseModel
 from typer.testing import CliRunner
 
-from puzzler.cli import cli
+from puzzletree.cli import cli
 
 
 def test_main() -> None:
@@ -35,7 +35,7 @@ def test_show_version() -> None:
     result = runner.invoke(cli, ["--version"])
     assert result.exit_code == 0
     # Version info should be in output
-    assert "puzzler" in result.output.lower()
+    assert "puzzletree" in result.output.lower()
 
 
 def test_show_debug_info() -> None:
@@ -65,7 +65,7 @@ def test_main_with_validation_error(cli_runner: CliRunner, cli_app: typer.Typer)
         _RequiredModel()
 
     with patch(
-        "puzzler.cli.main_cli.Config",
+        "puzzletree.cli.main_cli.Config",
         side_effect=_raise_validation_error,
     ):
         result = cli_runner.invoke(cli_app, ["noop"])

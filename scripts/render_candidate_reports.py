@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from puzzler.reconstruct.inspect import save_candidate_report
+from puzzletree.reconstruct.inspect import save_candidate_report
 
 
 def main() -> None:

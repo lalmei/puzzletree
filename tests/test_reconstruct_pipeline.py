@@ -6,9 +6,9 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from puzzler.reconstruct import connected_components, run_reconstruction, to_float_array
-from puzzler.reconstruct.core import build_weight_matrices
-from puzzler.reconstruct.pipeline import ReconstructOptions, run_from_options
+from puzzletree.reconstruct import connected_components, run_reconstruction, to_float_array
+from puzzletree.reconstruct.core import build_weight_matrices
+from puzzletree.reconstruct.pipeline import ReconstructOptions, run_from_options
 
 ROWS = 4
 COLS = 5

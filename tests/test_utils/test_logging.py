@@ -10,7 +10,7 @@ from unittest.mock import patch
 import pytest
 from rich.console import Console
 
-from puzzler.utils.logging import (
+from puzzletree.utils.logging import (
     _attach_rotating_file_handler,
     _set_up_logger,
     get_logger_console,
@@ -136,7 +136,7 @@ class TestGetLoggerConsole:
 
         assert isinstance(logger, Logger)
         assert isinstance(console, Console)
-        assert logger.name == "puzzler"
+        assert logger.name == "puzzletree"
 
     def test_get_logger_console_rich_handler_console(self) -> None:
         """Test that console from rich handler is used."""
@@ -189,7 +189,7 @@ class TestLoggingErrorHandling:
 
 def test_set_up_logger_console_creation_not_in_pytest() -> None:
     """Test that console is created with theme when not in pytest."""
-    with patch("puzzler.utils.logging._is_running_in_pytest", return_value=False):
+    with patch("puzzletree.utils.logging._is_running_in_pytest", return_value=False):
         logger = _set_up_logger("test_logger_not_pytest")
 
         assert logger is not None

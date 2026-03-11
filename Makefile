@@ -28,10 +28,10 @@ deployments.dir := deployment
 uv.project.enviroment := .venv
 dist.dir := dist
 
-build.wheel := $(dist.dir)/puzzler-$(version).tar.gz
+build.wheel := $(dist.dir)/puzzletree-$(version).tar.gz
 
-docker.image := puzzler_base
-docker.image.deploy := puzzler
+docker.image := puzzletree_base
+docker.image.deploy := puzzletree
 
 docker.image.registry := docker.io
 
@@ -40,7 +40,7 @@ docker.image.registry := docker.io
 # subdirs := $(patsubst $(deployments.dir)/%,%,$(deployments.instances))
 
 
-build.wheel := $(dist.dir)/puzzler-$(version).tar.gz
+build.wheel := $(dist.dir)/puzzletree-$(version).tar.gz
 
 
 uv.project.enviroment := .venv

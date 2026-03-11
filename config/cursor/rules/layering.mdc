@@ -1,6 +1,6 @@
 ---
 description: Keep CLI (Typer/Rich) in cli/; core logic in src; no CLI imports in core.
-globs: "src/puzzler/**/*.py"
+globs: "src/puzzletree/**/*.py"
 alwaysApply: true
 ---
 

@@ -14,7 +14,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-from puzzler.utils.theme.theme import set_theme
+from puzzletree.utils.theme.theme import set_theme
 
 
 @dataclass
@@ -66,7 +66,7 @@ def _interpreter_name_version() -> tuple[str, str]:
     return "", "0.0.0"
 
 
-def get_version(dist: str = "puzzler") -> str:
+def get_version(dist: str = "puzzletree") -> str:
     """Get version of the given distribution.
 
     Parameters:
@@ -90,7 +90,7 @@ def version_info() -> Text:
         Version information.
     """
     version = get_version()
-    return Text.assemble(("puzzler: ", "peach"), (f"{version}", "bold"))
+    return Text.assemble(("puzzletree: ", "peach"), (f"{version}", "bold"))
 
 
 def get_debug_info() -> Environment:
@@ -100,10 +100,10 @@ def get_debug_info() -> Environment:
         Environment information.
     """
     py_name, py_version = _interpreter_name_version()
-    packages = ["puzzler"]
+    packages = ["puzzletree"]
     variables = [
         "PYTHONPATH",
-        *[var for var in os.environ if var.startswith("puzzler")],
+        *[var for var in os.environ if var.startswith("puzzletree")],
     ]
     return Environment(
         interpreter_name=py_name,
@@ -180,7 +180,7 @@ def debug_info(console: Console | None = None) -> None:
         console = Console(theme=set_theme())
 
     env = get_debug_info()
-    from puzzler.cli.messages.layout import use_layout  # noqa: PLC0415 - deferred to avoid circular import
+    from puzzletree.cli.messages.layout import use_layout  # noqa: PLC0415 - deferred to avoid circular import
 
     if use_layout(console):
         console.print(_make_debug_layout(env))

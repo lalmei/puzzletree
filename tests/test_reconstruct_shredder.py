@@ -1,7 +1,7 @@
 import numpy as np
 from PIL import Image, ImageDraw
 
-from puzzler.reconstruct import connected_components, run_reconstruction, to_float_array
+from puzzletree.reconstruct import connected_components, run_reconstruction, to_float_array
 
 
 def make_synthetic_image(width: int, height: int) -> Image.Image:

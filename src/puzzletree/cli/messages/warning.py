@@ -4,7 +4,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
-from puzzler.cli.messages.capability import supports_unicode_markdown
+from puzzletree.cli.messages.capability import supports_unicode_markdown
 
 
 def warning_panel(message: str, console: Console | None = None) -> Panel:

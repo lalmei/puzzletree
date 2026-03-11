@@ -5,8 +5,8 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from puzzler.reconstruct.core import COMPONENT_GAP_TILES, AdjList, reconstruct_layout
-from puzzler.reconstruct.render import build_tree_animation_frames, render_reconstruction, save_tree_build_animation
+from puzzletree.reconstruct.core import COMPONENT_GAP_TILES, AdjList, reconstruct_layout
+from puzzletree.reconstruct.render import build_tree_animation_frames, render_reconstruction, save_tree_build_animation
 
 
 def solid_tile(rgb: tuple[int, int, int], size: int = 24) -> np.ndarray:

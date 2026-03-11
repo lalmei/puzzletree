@@ -8,7 +8,7 @@ from typing import Dict, List, Tuple
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-from puzzler.reconstruct.core import (
+from puzzletree.reconstruct.core import (
     AdjList,
     charged_path,
     chargeds,
@@ -17,9 +17,9 @@ from puzzler.reconstruct.core import (
     global_edge_exists,
     ita_path,
 )
-from puzzler.reconstruct.io import load_tiles_from_dir
-from puzzler.reconstruct.pipeline import run_reconstruction
-from puzzler.reconstruct.render import tile_rgba_images
+from puzzletree.reconstruct.io import load_tiles_from_dir
+from puzzletree.reconstruct.pipeline import run_reconstruction
+from puzzletree.reconstruct.render import tile_rgba_images
 
 SideName = str
 
@@ -307,7 +307,7 @@ def _resize_to_fit(image: Image.Image, max_width: int = 4200, max_height: int = 
 def load_inspection_dataset(input_dir: Path, minset: float = 0.1, r: float = 12.0) -> InspectionDataset:
     tiles = load_tiles_from_dir(input_dir)
     result = run_reconstruction(tiles, r=r, minset=minset)
-    from puzzler.reconstruct.core import build_weight_matrices
+    from puzzletree.reconstruct.core import build_weight_matrices
 
     lr, ud = build_weight_matrices(tiles, r=r)
     components = connected_components(result.adjs)

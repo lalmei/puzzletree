@@ -15,7 +15,7 @@
       "name": "run",
       "type": "debugpy",
       "request": "launch",
-      "module": "puzzler",
+      "module": "puzzletree",
       "console": "integratedTerminal",
       "justMyCode": false,
       "cwd": "${workspaceFolder}",

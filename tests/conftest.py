@@ -4,7 +4,7 @@ import pytest
 from typer import Typer
 from typer.testing import CliRunner
 
-from puzzler.cli import cli
+from puzzletree.cli import cli
 
 # Register a test-only subcommand so tests can invoke a subcommand without template-provided commands
 _noop_app = Typer()

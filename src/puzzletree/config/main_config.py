@@ -1,4 +1,4 @@
-"""Configuration management for puzzler."""
+"""Configuration management for puzzletree."""
 
 # Template note: These imports are kept for potential future use in template expansions
 # They may be used conditionally based on template variables or in extended configurations
@@ -17,7 +17,7 @@ from pydantic_settings import (
     SettingsConfigDict,
 )
 
-from puzzler._version import get_version
+from puzzletree._version import get_version
 
 
 class Config(BaseSettings):
@@ -32,11 +32,11 @@ class Config(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env", ".env.dev", ".env.prod"),
         env_file_encoding="utf-8",
-        json_file="puzzler_config.json",
+        json_file="puzzletree_config.json",
     )
     # Configurations for the application
-    app_name: str = "puzzler"
-    app_description: str = "Puzzle reconstruction experiments and CLI tooling."
+    app_name: str = "puzzletree"
+    app_description: str = "JigSaw Puzzle reconstruction with Spanning Trees."
     app_author: str = "lalmei"
     app_version: str = get_version()
     log_format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

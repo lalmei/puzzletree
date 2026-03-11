@@ -11,7 +11,7 @@ Nothing easier!
 Fork and clone the repository, then:
 
 ```bash
-cd puzzler
+cd <repo-directory>
 make setup
 ```
 
@@ -27,7 +27,7 @@ make setup
 
 You now have the dependencies installed.
 
-You can run the application with `make run puzzler [ARGS...]`.
+You can run the application with `make run puzzletree [ARGS...]`.
 
 Run `make help` to see all the available actions!
 
@@ -78,9 +78,9 @@ In CI, the build can also pick up `CI_COMMIT_TAG` / `CI_COMMIT_SHORT_SHA` if you
 
 The Makefile keeps the image naming deliberately simple:
 
-- `docker.image` is the basename: `puzzler`
-- `docker.image.base` is the base/testing image name: `puzzler_base`
-- `docker.image.deploy` is the workflow-specific deployment image name: `puzzler_<workflow>`
+- `docker.image` is the basename: `puzzletree`
+- `docker.image.base` is the base/testing image name: `puzzletree_base`
+- `docker.image.deploy` is the workflow-specific deployment image name: `puzzletree_<workflow>`
 
 To build or reference a workflow-specific deployment image, pass `workflow=<name>` (for example `workflow=sealant`).
 

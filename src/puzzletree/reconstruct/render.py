@@ -9,7 +9,7 @@ from typing import List, Tuple
 import numpy as np
 from PIL import Image
 
-from puzzler.reconstruct.core import AdjList, chargeds, connected_components, reconstruct_layout
+from puzzletree.reconstruct.core import AdjList, chargeds, connected_components, reconstruct_layout
 
 
 def render_reconstruction(tiles: Sequence[np.ndarray], placements: dict[int, tuple[int, int]]) -> Image.Image:
@@ -201,7 +201,7 @@ def save_tree_build_animation(
     seed: int = 0,
     frame_size: int = 1024,
     max_angle: float = 35.0,
-    duration_ms: int = 400,
+    duration_ms: int = 1000,
     frames_dir: Path | None = None,
 ) -> None:
     frames = build_tree_animation_frames(

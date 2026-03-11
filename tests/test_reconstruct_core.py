@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from puzzler.reconstruct.core import AdjList, charged_path, chargeds
+from puzzletree.reconstruct.core import AdjList, charged_path, chargeds
 
 
 def test_charged_path_uses_same_coordinate_system_as_chargeds() -> None:

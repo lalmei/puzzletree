@@ -1,9 +1,9 @@
-"""fun CLI Application Main Entry Point.
+"""Puzzletree CLI application entry point.
 
 ------------------------
 
-This module defines the main Typer-based CLI application for fun. It serves as the entry point
-for various subcommands related to building and managing repositories.
+This module defines the main Typer-based CLI application for Puzzletree.
+It serves as the entry point for the tile and reconstruct commands.
 
 Features:
 - Uses `Typer` for CLI structure and command dispatch.
@@ -18,8 +18,8 @@ Behavior:
 
 Example usage:
 
-    python -m puzzler.cli --version
-    python -m puzzler.cli --debug-info
+    python -m puzzletree.cli --version
+    python -m puzzletree.cli --debug-info
 
 Dependencies:
 - typer
@@ -35,11 +35,11 @@ from rich.console import Console
 from rich.text import Text
 from typer import Context, Exit, Option, Typer
 
-from puzzler._version import debug_info, version_info
-from puzzler.cli.register import _register_commands
-from puzzler.config import Config
-from puzzler.utils.logging import get_logger_console
-from puzzler.utils.theme.theme import set_theme
+from puzzletree._version import debug_info, version_info
+from puzzletree.cli.register import _register_commands
+from puzzletree.config import Config
+from puzzletree.utils.logging import get_logger_console
+from puzzletree.utils.theme.theme import set_theme
 
 
 cli_app = Typer(add_completion=True, invoke_without_command=True, no_args_is_help=True)
@@ -80,7 +80,9 @@ def _debug_info_callback(value: bool) -> None:
 @cli_app.callback(invoke_without_command=True, no_args_is_help=True)
 def main(
     ctx: Context,
-    dry_run: bool | None = Option(False, "--dry-run", help="Show changes but do not execute them"),
+    dry_run: bool | None = Option(
+        False, "--dry-run", help="Show changes but do not execute them"
+    ),
     verbose: bool | None = Option(False, "--verbose", "-v", help="verbose mode"),
     version: bool | None = Option(  # noqa: ARG001 - Handled by callback
         None,
@@ -96,24 +98,11 @@ def main(
         callback=_debug_info_callback,
         is_eager=True,
     ),
-    theme: str | None = Option("dark", "--theme", help="Set the theme, 'light' or 'dark' "),
+    theme: str | None = Option(
+        "dark", "--theme", help="Set the theme, 'light' or 'dark' "
+    ),
 ) -> None:
-    r"""Welcome to fun CLI App.
-
-    \f
-
-    Parameters
-    ----------
-    ctx : typer.Context
-        typer context that lives throughout model command
-    verbose : bool | None
-        set logging to DEBUG , by default typer.Option(False, "--verbose", help="verbose mode")
-        it is also saved in the ctx obj so it can be referred for other noisy output
-    version : bool | None
-        outputs version information, by default typer.Option(None, "--version",
-        help="check model version", callback=_version_callback)
-
-    """
+    r"""Welcome to Puzzletree."""
     logger, _ = get_logger_console()
 
     config: Config | None = None
@@ -129,7 +118,9 @@ def main(
         logger.debug(Text("Configuration set", style="yellow"))
     except ValidationError:
         logger.exception("Unable to load configuration: ")
-        logger.exception("Obtained the following validating Errors loading configuration")
+        logger.exception(
+            "Obtained the following validating Errors loading configuration"
+        )
         config = None
 
     ctx.obj = {

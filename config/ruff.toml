@@ -59,14 +59,14 @@ ignore = [
 "src/**/__init__.py" = [
     "D104",  # Missing docstring in public package
 ]
-"src/puzzler/cli/**/*.py" = [
+"src/puzzletree/cli/**/*.py" = [
     "B008",  # Typer Option/Argument declarations are evaluated at import time
     "FBT001",  # Boolean CLI flags are part of the public interface
     "FBT002",  # Boolean CLI flags are part of the public interface
     "FBT003",  # Boolean CLI flags are part of the public interface
     "TC003",  # Path and similar annotations are used at runtime in CLI commands
 ]
-"src/puzzler/reconstruct/**/*.py" = [
+"src/puzzletree/reconstruct/**/*.py" = [
     "C416",  # Comprehensions here are clearer than dict()/list() casts
     "FBT001",  # Utility flags are intentional in this module
     "FBT002",  # Utility flags are intentional in this module
@@ -110,7 +110,7 @@ docstring-quotes = "double"
 ban-relative-imports = "all"
 
 [lint.isort]
-known-first-party = ["puzzler"]
+known-first-party = ["puzzletree"]
 
 [lint.pydocstyle]
 convention = "google"

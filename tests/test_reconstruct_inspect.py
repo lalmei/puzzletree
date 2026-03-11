@@ -4,8 +4,8 @@ from pathlib import Path
 
 import numpy as np
 
-from puzzler.reconstruct.core import connected_components
-from puzzler.reconstruct.inspect import (
+from puzzletree.reconstruct.core import connected_components
+from puzzletree.reconstruct.inspect import (
     CandidateInspection,
     InspectionDataset,
     render_candidate_contact_sheet,

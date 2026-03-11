@@ -15,12 +15,12 @@ test-unit: clean ## Run unit tests only
 .PHONY: test-coverage
 test-coverage: clean ## Run tests with coverage report
 	@$(call i, Running tests with coverage)
-	uv run pytest -c=config/pytest.ini --cov=src/puzzler --cov-report=term-missing --cov-report=html tests/
+	uv run pytest -c=config/pytest.ini --cov=src/puzzletree --cov-report=term-missing --cov-report=html tests/
 
 .PHONY: test-coverage-report
 test-coverage-report: clean ## Run tests with coverage report (no fail-under; for CI/reporting)
 	@$(call i, Running tests with coverage)
-	uv run pytest -c=config/pytest.ini --cov=src/puzzler --cov-report=term-missing --cov-report=html --cov-fail-under=0 tests/
+	uv run pytest -c=config/pytest.ini --cov=src/puzzletree --cov-report=term-missing --cov-report=html --cov-fail-under=0 tests/
 
 .PHONY: test-fast
 test-fast: clean ## Run fast tests (skip slow ones)

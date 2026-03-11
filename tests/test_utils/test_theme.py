@@ -3,8 +3,8 @@
 import pytest
 from rich.theme import Theme
 
-from puzzler.utils.theme.terminal_colors import get_rich_color
-from puzzler.utils.theme.theme import _create_theme, set_theme
+from puzzletree.utils.theme.terminal_colors import get_rich_color
+from puzzletree.utils.theme.theme import _create_theme, set_theme
 
 
 class TestThemeCreation:

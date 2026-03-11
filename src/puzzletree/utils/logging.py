@@ -1,4 +1,4 @@
-"""Logging utilities for puzzler CLI application."""
+"""Logging utilities for puzzletree CLI application."""
 
 import os
 import sys
@@ -11,8 +11,8 @@ from typing import cast
 from rich.console import Console
 from rich.logging import RichHandler
 
-from puzzler.config import Config
-from puzzler.utils.theme.theme import set_theme
+from puzzletree.config import Config
+from puzzletree.utils.theme.theme import set_theme
 
 
 def _is_running_in_pytest() -> bool:
@@ -31,7 +31,7 @@ def _is_running_in_pytest() -> bool:
 
 
 def _set_up_logger(
-    name: str = "puzzler",
+    name: str = "puzzletree",
     console: Console | None = None,
     log_level: int | None = None,
     *,
@@ -114,14 +114,14 @@ def _attach_rotating_file_handler(
 
 
 def get_logger_console(
-    name: str = "puzzler",
+    name: str = "puzzletree",
     console: Console | None = None,
     log_level: int | None = None,
 ) -> tuple[Logger, Console]:
     """Get logger and console.
 
     Args:
-        name (str, optional): _description_. Defaults to "puzzler".
+        name (str, optional): _description_. Defaults to "puzzletree".
         console (Console | None, optional): _description_. Defaults to None.
         log_level (int, optional): _description_. Defaults to INFO.
 
@@ -143,7 +143,7 @@ def get_logger_console(
         log_level=log_level,
     )
 
-    if name != "puzzler":
+    if name != "puzzletree":
         logger = getLogger(name)
         logger.handlers = root_logger.handlers
         logger.setLevel(level=root_logger.level)

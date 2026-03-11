@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from puzzler.utils.progress_bar import ProgressBar, StageProgressBar
+from puzzletree.utils.progress_bar import ProgressBar, StageProgressBar
 
 
 class TestProgressBarInit:
