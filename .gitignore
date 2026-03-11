@@ -30,3 +30,8 @@ __pycache__/
 
 # project data
 data/
+.cursor/
+.codex/
+
+output/
+notebook/demo_output*/
