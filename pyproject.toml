@@ -6,7 +6,7 @@ build-backend = "uv_build"
 
 
 [project]
-name = "puzzler"
+name = "puzzletree"
 description = "Puzzle reconstruction experiments and CLI tooling."
 authors = [{name = "lalmei", email = ""}]
 license = "ISC"
@@ -39,18 +39,18 @@ dependencies = [
     "typer>=0.17.3",]
 
 [project.urls]
-Homepage = "https://lalmei.github.io/puzzler"
-Documentation = "https://lalmei.github.io/puzzler"
-Changelog = "https://lalmei.github.io/puzzler/changelog"
-Repository = "https://github/lalmei/puzzler"
-Issues = "https://github/lalmei/puzzler/issues"
-Discussions = "https://github/lalmei/puzzler/discussions"
+Homepage = "https://lalmei.github.io/puzzletree"
+Documentation = "https://lalmei.github.io/puzzletree"
+Changelog = "https://lalmei.github.io/puzzletree/changelog"
+Repository = "https://github.com/lalmei/puzzletree"
+Issues = "https://github.com/lalmei/puzzletree/issues"
+Discussions = "https://github.com/lalmei/puzzletree/discussions"
 [project.scripts]
-puzzler = "puzzler.cli:main"
+puzzletree = "puzzletree:cli"
 
 [tool.uv.build-backend]
 module-root = "src"
-module-name = "puzzler"
+module-name = "puzzletree"
 
 [tool.uv]
 default-groups = ["maintain", "ci", "docs"]

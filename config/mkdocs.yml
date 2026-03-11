@@ -1,10 +1,10 @@
-site_name: "fun"
+site_name: "Puzzletree"
 site_description: "Puzzle reconstruction experiments and CLI tooling."
-site_url: "https://lalmei.github.io/puzzler"
-repo_url: "https://github/lalmei/puzzler"
-repo_name: "lalmei/puzzler"
+site_url: "https://lalmei.github.io/puzzletree"
+repo_url: "https://github.com/lalmei/puzzletree"
+repo_name: "lalmei/puzzletree"
 site_dir: ""
-watch: [mkdocs.yml, README.md, CONTRIBUTING.md, CHANGELOG.md, AI_POLICY.md, src/puzzler]
+watch: [mkdocs.yml, README.md, CONTRIBUTING.md, CHANGELOG.md, AI_POLICY.md, src/puzzletree]
 copyright: Copyright &copy; 2026 lalmei
 edit_uri: edit/main/docs/
 
@@ -151,7 +151,7 @@ extra:
   - icon: fontawesome/brands/mastodon
     link: https://fosstodon.org/@lalmei
   - icon: fontawesome/brands/python
-    link: https://pypi.org/project/puzzler/
+    link: https://pypi.org/project/puzzletree/
   analytics:
     feedback:
       title: Was this page helpful?

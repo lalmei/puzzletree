@@ -13,14 +13,14 @@ dataset_enabled: false
 docs_only: false
 fastapi_enabled: false
 project_description: Puzzle reconstruction experiments and CLI tooling.
-project_name: fun
-python_distribution_name: puzzler
+project_name: puzzletree
+python_distribution_name: puzzletree
 python_notebooks: false
-python_package_command_line_name: puzzler
-python_package_distribution_name: puzzler
-python_package_import_name: puzzler
+python_package_command_line_name: puzzletree
+python_package_distribution_name: puzzletree
+python_package_import_name: puzzletree
 rag_enabled: false
-repository_name: puzzler
+repository_name: puzzletree
 repository_namespace: lalmei
 repository_provider: github
 
