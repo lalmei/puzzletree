@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <!-- insertion marker -->
 
+## [0.2.0] - 2026-03-12
+
+### Added
+
+- ✨ Added a `make bump-minor` workflow backed by `bump2version` configuration.
+
+### Changed
+
+- ♻️ Switched version bump targets from `poetry run` to `uv run`.
+- 🔧 Synced repository version metadata so `Makefile`, package metadata, and the local environment all report `0.2.0`.
+- 🔧 Normalized debug environment variable discovery to handle `puzzletree` keys case-insensitively.
+- 🔧 Dropped the unused `scipy` dependency from the project environment.
+- 🔧 Required Python 3.11 in CI.
+- 📝 Improved README layout and badges.
+- 📝 Published live coverage reporting in the docs site.
+- 📝 Cleaned up stale changelog and rename notes.
+
+### Fixed
+
+- ✅ Relaxed brittle CLI and debug-environment test assertions.
+- 🩹 Kept strict MkDocs builds clean for documentation publishing.
+
 ## [0.1.0] - 2026-03-12
 
 ### Added
