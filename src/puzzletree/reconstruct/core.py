@@ -4,7 +4,6 @@ from collections.abc import Sequence
 from typing import Dict, List, Tuple
 
 import numpy as np
-from scipy.ndimage import gaussian_filter1d
 
 SideEdge = Tuple[int, int]  # (side_label, neighbor_index)
 AdjList = List[List[SideEdge]]
@@ -22,9 +21,30 @@ def var2(arr: np.ndarray) -> float:
     return float(np.var(arr, axis=0).sum())
 
 
+def gaussian_filter1d_nearest(arr: np.ndarray, sigma: float, axis: int = 0) -> np.ndarray:
+    if sigma <= 0:
+        return arr.astype(np.float64, copy=False)
+
+    radius = max(1, int(round(4.0 * sigma)))
+    offsets = np.arange(-radius, radius + 1, dtype=np.float64)
+    kernel = np.exp(-(offsets**2) / (2.0 * sigma * sigma))
+    kernel /= kernel.sum()
+
+    moved = np.moveaxis(arr.astype(np.float64, copy=False), axis, 0)
+    pad_width = [(radius, radius)] + [(0, 0)] * (moved.ndim - 1)
+    padded = np.pad(moved, pad_width, mode="edge")
+
+    smoothed = np.empty_like(moved, dtype=np.float64)
+    for idx in range(moved.shape[0]):
+        window = padded[idx : idx + kernel.size]
+        smoothed[idx] = np.tensordot(kernel, window, axes=(0, 0))
+
+    return np.moveaxis(smoothed, 0, axis)
+
+
 def corr(edge1: np.ndarray, edge2: np.ndarray, r: float) -> float:
-    diff = gaussian_filter1d(edge1 - edge2, sigma=r, axis=0, mode="nearest")
-    summ = gaussian_filter1d(edge1 + edge2, sigma=r, axis=0, mode="nearest")
+    diff = gaussian_filter1d_nearest(edge1 - edge2, sigma=r, axis=0)
+    summ = gaussian_filter1d_nearest(edge1 + edge2, sigma=r, axis=0)
     denom = max(var2(summ), 1e-12)
     return var2(diff) / denom
 
