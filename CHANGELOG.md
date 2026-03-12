@@ -19,7 +19,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- 🚚 Renamed the project and package metadata from `puzzler` to `puzzletree`.
 - ♻️ Improved reconstruction defaults, packing behavior, and layout handling.
 - 🔧 Cleaned up repository configuration and local artifact handling.
 
