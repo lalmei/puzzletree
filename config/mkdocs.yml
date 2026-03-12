@@ -21,11 +21,11 @@ nav:
   - Credits: credits.md
   - License: license.md
 - API reference: reference/api.md
+- Architecture: reference/architecture.md
 - Development:
   - Contributing: contributing.md
   - Code of Conduct: code_of_conduct.md
   - AI Usage Policy: ai_policy.md
-  - Coverage report: coverage.md
 
 theme:
   name: material
@@ -101,8 +101,6 @@ plugins:
 - search
 - autorefs
 - markdown-exec
-- section-index
-- coverage
 - mkdocstrings:
     handlers:
       python:
