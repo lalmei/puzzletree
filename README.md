@@ -47,6 +47,8 @@ This writes the reconstructed image to `./puzzletree-city-reconstructed.png` and
 when `--animation` is set, saves animation frames to
 `./puzzletree-city-frames`.
 
+![Tree build animation](docs/assets/images/tree_build_city.gif)
+
 If you installed the package globally, the same command works without `uv run`:
 
 ```bash
