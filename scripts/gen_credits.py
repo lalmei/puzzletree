@@ -22,8 +22,11 @@ if sys.version_info >= (3, 11):
 else:
     import tomli as tomllib
 
-project_dir = Path(os.getenv("MKDOCS_CONFIG_DIR", "."))
-with project_dir.joinpath("pyproject.toml").open("rb") as pyproject_file:
+project_dir = Path(os.getenv("MKDOCS_CONFIG_DIR", ".")).resolve()
+pyproject_path = project_dir / "pyproject.toml"
+if not pyproject_path.exists():
+    pyproject_path = project_dir.parent / "pyproject.toml"
+with pyproject_path.open("rb") as pyproject_file:
     pyproject = tomllib.load(pyproject_file)
 project = pyproject["project"]
 project_name = project["name"]
@@ -78,7 +81,7 @@ def _set_license(metadata: PackageMetadata) -> None:
     check_classifiers = license_name in ("UNKNOWN", "Dual License", "") or license_name.count("\n")
     if check_classifiers:
         license_names = []
-        for classifier in metadata["classifier"]:
+        for classifier in metadata.get("classifier", []):
             if classifier.startswith("License ::"):
                 license_names.append(classifier.rsplit("::", 1)[1].strip())
         license_name = " + ".join(license_names)
