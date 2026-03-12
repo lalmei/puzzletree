@@ -22,10 +22,16 @@ publish: build ## Publish to PyPI
 	@$(call i, Publishing to PyPI)
 	uv publish
 
+.PHONY: publish-pypi
+publish-pypi: publish ## Alias for publish
+
 .PHONY: publish-test
 publish-test: build ## Publish to TestPyPI
 	@$(call i, Publishing to TestPyPI)
 	uv publish --publish-url https://test.pypi.org/legacy/
+
+.PHONY: publish-testpypi
+publish-testpypi: publish-test ## Alias for publish-test
 
 .PHONY: clean
 clean: ## Clean up build artifacts and caches
