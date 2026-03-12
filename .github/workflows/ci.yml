@@ -46,14 +46,8 @@ jobs:
     - name: Check if the documentation builds correctly
       run: make check-docs
 
-    - name: Check the code quality
-      run: make check-quality
-
-    - name: Check if the code is correctly typed
-      run: make check-types
-
-    - name: Check for breaking changes in the API
-      run: make check-api
+    - name: Check the project quality
+      run: make check
 
     - name: Store objects inventory for tests
       uses: actions/upload-artifact@v4
@@ -87,7 +81,8 @@ jobs:
           resolution: lowest-direct
         - os: windows-latest
           resolution: lowest-direct
-    runs-on: ${{ matrix.os }}    continue-on-error: ${{ matrix.python-version == '3.14' }}
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.python-version == '3.14' }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -98,7 +93,8 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}        allow-prereleases: true
+        python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
 
     - name: Setup uv
       uses: astral-sh/setup-uv@v5
@@ -108,7 +104,8 @@ jobs:
         cache-suffix: ${{ matrix.resolution }}
     - name: Install dependencies
       env:
-        UV_RESOLUTION: ${{ matrix.resolution }}      run: make setup
+        UV_RESOLUTION: ${{ matrix.resolution }}
+      run: make setup
 
     - name: Download objects inventory
       uses: actions/download-artifact@v4
