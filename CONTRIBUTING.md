@@ -150,7 +150,7 @@ We do not enforce a line length on commit messages summary and body, but please 
 
 Link to any related issue in the Pull Request message.
 
-Please review our [AI Usage Policy](AI_POLICY.md) before submitting pull requests, especially if AI tools were used.
+Please review our [AI Usage Policy](https://github.com/lalmei/puzzletree/blob/main/AI_POLICY.md) before submitting pull requests, especially if AI tools were used.
 
 During the review, we recommend using fixups:
 

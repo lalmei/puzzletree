@@ -3,8 +3,9 @@ site_description: "Puzzle reconstruction experiments and CLI tooling."
 site_url: "https://lalmei.github.io/puzzletree"
 repo_url: "https://github.com/lalmei/puzzletree"
 repo_name: "lalmei/puzzletree"
-site_dir: ""
-watch: [mkdocs.yml, README.md, CONTRIBUTING.md, CHANGELOG.md, AI_POLICY.md, src/puzzletree]
+docs_dir: ../docs
+site_dir: ../site
+watch: [../README.md, ../CONTRIBUTING.md, ../CHANGELOG.md, ../AI_POLICY.md, ../src/puzzletree]
 copyright: Copyright &copy; 2026 lalmei
 edit_uri: edit/main/docs/
 
@@ -28,7 +29,7 @@ nav:
 
 theme:
   name: material
-  custom_dir: docs/.overrides
+  custom_dir: ../docs/.overrides
   
   features:
   - announce.dismiss
@@ -83,7 +84,7 @@ markdown_extensions:
     emoji_generator: !!python/name:material.extensions.emoji.to_svg
 - pymdownx.magiclink
 - pymdownx.snippets:
-    base_path: [!relative $config_dir]
+    base_path: [.]
     check_paths: true
 - pymdownx.superfences
 - pymdownx.tabbed:

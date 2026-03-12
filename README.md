@@ -19,7 +19,7 @@ uv tool install puzzletree
 ## Reconstruct Demo
 
 The `reconstruct` command expects a directory of equally sized tile images. The
-images in [`tests/test_data`](tests/test_data) are
+images in [`tests/test_data`](https://github.com/lalmei/puzzletree/tree/main/tests/test_data) are
 full reference images, so the quickest demo flow is:
 
 1. Split one of the bundled images into tiles.
@@ -58,5 +58,5 @@ puzzletree reconstruct --input-dir ./puzzletree-city-tiles
 
 Other bundled demo images:
 
-- [`tests/test_data/imagenet_dog.jpg`](tests/test_data/imagenet_dog.jpg)
-- [`tests/test_data/imagenet_dog_blur.jpg`](tests/test_data/imagenet_dog_blur.jpg)
+- [`tests/test_data/imagenet_dog.jpg`](https://github.com/lalmei/puzzletree/blob/main/tests/test_data/imagenet_dog.jpg)
+- [`tests/test_data/imagenet_dog_blur.jpg`](https://github.com/lalmei/puzzletree/blob/main/tests/test_data/imagenet_dog_blur.jpg)
