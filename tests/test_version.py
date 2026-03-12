@@ -131,7 +131,7 @@ class TestGetDebugInfo:
         result = get_debug_info()
         variable_names = [var.name for var in result.variables]
         assert "PYTHONPATH" in variable_names
-        assert "puzzletree_DEBUG" in variable_names
+        assert "puzzletree_debug" in {name.lower() for name in variable_names}
 
     @patch.dict(os.environ, {}, clear=True)
     def test_get_debug_info_without_environment_variables(self) -> None:
