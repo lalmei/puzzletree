@@ -4,10 +4,10 @@
   <a href="https://lalmei.github.io/puzzletree"><img alt="documentation" src="https://img.shields.io/badge/docs-mkdocs-708FCC.svg?style=flat"></a>
   <a href="https://pypi.org/project/puzzletree/"><img alt="pypi version" src="https://img.shields.io/pypi/v/puzzletree.svg"></a>
   <a href="https://github.com/lalmei/puzzletree/actions/workflows/ci.yml"><img alt="ci" src="https://github.com/lalmei/puzzletree/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="https://github.com/lalmei/puzzletree/blob/main/config/coverage.ini"><img alt="coverage threshold" src="https://img.shields.io/badge/coverage%20threshold-70%25-teal.svg"></a>
+  <a href="https://lalmei.github.io/puzzletree/coverage/"><img alt="coverage" src="https://img.shields.io/endpoint?url=https://lalmei.github.io/puzzletree/coverage-badge.json"></a>
 </p>
 
-> Puzzle reconstruction experiments and CLI tooling.
+> Puzzle reconstruction experiments.
 
 This project grew out of a puzzle-reconstruction challenge I answered on
 Mathematica Stack Exchange. The core idea is to use spanning trees as a natural

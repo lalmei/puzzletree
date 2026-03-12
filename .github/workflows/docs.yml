@@ -50,6 +50,15 @@ jobs:
     - name: Install dependencies
       run: make setup
 
+    - name: Run tests for coverage artifacts
+      run: make test
+
+    - name: Prepare coverage assets for Pages
+      run: |
+        rm -rf docs/coverage
+        cp -R htmlcov docs/coverage
+        python scripts/generate_coverage_badge.py coverage.xml docs/coverage-badge.json
+
     - name: Check docs in strict mode
       run: uv run mkdocs build --config-file=config/mkdocs.yml --strict
 
