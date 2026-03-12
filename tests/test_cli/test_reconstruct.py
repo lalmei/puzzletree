@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import numpy as np
 from PIL import Image
 
 from puzzletree.reconstruct.io import load_tiles_from_dir
+
+ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
 
 
 def write_test_tiles(output_dir: Path, rows: int = 3, cols: int = 4, tile_size: int = 24) -> Path:
@@ -34,7 +37,9 @@ def test_reconstruct_help(cli_runner, cli_app) -> None:
 def test_reconstruct_requires_input_dir(cli_runner, cli_app) -> None:
     result = cli_runner.invoke(cli_app, ["reconstruct"])
     assert result.exit_code != 0
-    assert "--input-dir" in result.output
+    normalized_output = ANSI_ESCAPE_RE.sub("", result.output)
+    assert "input-dir" in normalized_output
+    assert "[required]" in normalized_output.lower()
 
 
 def test_reconstruct_input_dir_writes_output(tmp_path: Path, cli_runner, cli_app) -> None:
