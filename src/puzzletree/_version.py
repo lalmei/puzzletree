@@ -101,10 +101,14 @@ def get_debug_info() -> Environment:
     """
     py_name, py_version = _interpreter_name_version()
     packages = ["puzzletree"]
-    variables = [
-        "PYTHONPATH",
-        *[var for var in os.environ if var.startswith("puzzletree")],
-    ]
+    variables = list(
+        dict.fromkeys(
+            [
+                "PYTHONPATH",
+                *[var for var in os.environ if var.lower().startswith("puzzletree")],
+            ],
+        ),
+    )
     return Environment(
         interpreter_name=py_name,
         interpreter_version=py_version,
