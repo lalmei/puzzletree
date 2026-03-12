@@ -1,7 +1,7 @@
 SHELL := bash
 
 
-version := 0.8.1
+version := 0.2.0
 
 # ----------------
 # Image Tagging
@@ -65,32 +65,32 @@ tests: test ## Alias for test
 .PHONY: bump-patch
 bump-patch: ## Bump the patch version (_._.X) everywhere.
 	@$(call i, Bumping the patch number)
-	poetry run bump2version patch --allow-dirty --verbose --config-file config/.bumpversion.cfg
+	uv run bump2version patch --allow-dirty --verbose --config-file config/.bumpversion.cfg
 
 .PHONY: bump-minor
 bump-minor: ## Bump the minor version (_.X._) everywhere.
 	@$(call i, Bumping the minor number)
-	poetry run bump2version minor --allow-dirty --verbose --config-file config/.bumpversion.cfg
+	uv run bump2version minor --allow-dirty --verbose --config-file config/.bumpversion.cfg
 
 .PHONY: bump-major
 bump-major: ## Bump the major version (X._._) everywhere.
 	@$(call i, Bumping the major number)
-	poetry run bump2version major --allow-dirty --verbose --config-file config/.bumpversion.cfg
+	uv run bump2version major --allow-dirty --verbose --config-file config/.bumpversion.cfg
 
 .PHONY: bump-release
 bump-release: ## Convert the version into a release variant (_._._).
 	@$(call i, Converting to release)
-	poetry run bump2version release --allow-dirty --verbose --config-file config/.bumpversion.cfg
+	uv run bump2version release --allow-dirty --verbose --config-file config/.bumpversion.cfg
 
 .PHONY: bump-dev
 bump-dev: ## Convert the version into a dev variant (_._._-dev__).
 	@$(call i, Converting to dev)
-	poetry run bump2version dev --allow-dirty --verbose --config-file config/.bumpversion.cfg
+	uv run bump2version dev --allow-dirty --verbose --config-file config/.bumpversion.cfg
 
 .PHONY: bump-build
 bump-build: ## Bump the build number (_._._-____XX) everywhere.
 	@$(call i, Bumbing the build number)
-	poetry run bump2version build --allow-dirty --verbose --config-file config/.bumpversion.cfg
+	uv run bump2version build --allow-dirty --verbose --config-file config/.bumpversion.cfg
 
 
 
