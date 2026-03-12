@@ -2,7 +2,18 @@
 
 [![documentation](https://img.shields.io/badge/docs-mkdocs-708FCC.svg?style=flat)](https://lalmei.github.io/puzzletree/)
 [![pypi version](https://img.shields.io/pypi/v/puzzletree.svg)](https://pypi.org/project/puzzletree/)
+[![ci](https://github.com/lalmei/puzzletree/actions/workflows/ci.yml/badge.svg)](https://github.com/lalmei/puzzletree/actions/workflows/ci.yml)
+[![coverage threshold](https://img.shields.io/badge/coverage%20threshold-70%25-teal.svg)](https://github.com/lalmei/puzzletree/blob/main/config/coverage.ini)
 Puzzle reconstruction experiments and CLI tooling.
+
+This project grew out of a puzzle-reconstruction challenge I answered on
+Mathematica Stack Exchange. The core idea is to use spanning trees as a natural
+way to assemble puzzles from local matches between neighboring pieces.
+
+In practice, the tree view is also a useful simplification step. You can match
+the obvious edges first, set a similarity threshold, and reduce a large matching
+problem into a small number of candidate trees. That leaves the harder
+ambiguous pieces for a second pass with more specialized algorithms.
 
 ## Installation
 
@@ -47,14 +58,16 @@ This writes the reconstructed image to `./puzzletree-city-reconstructed.png` and
 when `--animation` is set, saves animation frames to
 `./puzzletree-city-frames`.
 
-![Tree build animation](https://raw.githubusercontent.com/lalmei/puzzletree/main/docs/assets/images/tree_build_city.gif)
-
 If you installed the package globally, the same command works without `uv run`:
 
 ```bash
 puzzletree tile --input-image tests/test_data/city.jpg
 puzzletree reconstruct --input-dir ./puzzletree-city-tiles
 ```
+
+Animation output from the city demo:
+
+![Tree build animation](https://raw.githubusercontent.com/lalmei/puzzletree/main/docs/assets/images/tree_build_city.gif)
 
 Other bundled demo images:
 
